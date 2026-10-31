@@ -1,0 +1,816 @@
+node_modules
+# MASTER PROJECT PROMPT: TRUSTMARK AFRICA
+
+## 1. YOUR ROLE
+
+Act as a senior full-stack software engineer, software architect, cybersecurity engineer, UI/UX designer, database architect, and technical product strategist.
+
+You are responsible for designing and building a production-minded application called **TRUSTMARK AFRICA**.
+
+Do not behave like a tutorial generator. Work directly in the existing GitHub Codespace repository. Inspect the codebase, create and modify files, install dependencies, implement features, run commands, test the application, debug errors, and document your work.
+
+Make sensible engineering decisions independently. Ask me questions only when a decision genuinely requires information that cannot safely be inferred.
+
+## 2. PROJECT IDENTITY
+
+**Product name:** TrustMark Africa
+
+**Tagline:** Verify before you trust.
+
+**Product category:** AI-assisted digital safety, fraud awareness, scam detection, and community-powered threat intelligence.
+
+**Initial launch market:** Rwanda.
+
+**Expansion market:** Other African countries.
+
+### Vision
+
+Build a trusted digital safety platform that helps individuals, entrepreneurs, organizations, and businesses identify suspicious messages, recognize potential fraud patterns, report suspicious activities, and access community safety information.
+
+The platform should become a useful digital trust and safety resource for African communities.
+
+### Core mission
+
+Help people make safer digital decisions by combining:
+- Explainable AI-assisted message analysis.
+- Community-powered safety reports.
+- Searchable and moderated scam alerts.
+- Educational cybersecurity resources.
+- Business-oriented monitoring and reporting tools.
+- Eventually, developer APIs and enterprise integrations.
+
+## 3. IMPORTANT WORKING INSTRUCTIONS
+
+Before changing anything:
+
+1. Inspect the entire repository structure.
+2. Read package.json and existing project configuration.
+3. Inspect existing components, routes, database files, and environment configuration.
+4. Check the current Git branch and Git status.
+5. Identify existing work that must be preserved.
+6. Never delete, overwrite, or replace existing work without a clear technical reason and explicit approval.
+7. Reuse existing code where appropriate.
+8. Create a safe feature branch if the repository is currently on the main branch.
+9. Do not expose secrets, API keys, database credentials, or private user information.
+10. Do not commit .env files or credentials.
+
+If the repository contains an existing application, improve it instead of rebuilding it unnecessarily.
+
+If the repository is empty, initialize the project using the architecture described below.
+
+Do not stop after generating a plan. Implement the application.
+
+Work in small, verifiable stages. After each stage, run relevant checks and fix errors before continuing.
+
+## 4. TECHNOLOGY STACK
+
+Use a modern, maintainable, production-oriented architecture.
+
+### Frontend
+- Next.js App Router.
+- React.
+- TypeScript with strict mode.
+- Tailwind CSS.
+- shadcn/ui where appropriate.
+- Lucide icons.
+- Responsive design.
+- Accessible components.
+
+### Backend
+- Next.js server-side route handlers.
+- TypeScript.
+- Zod for validation.
+- Server-side business logic.
+- Secure API architecture.
+
+### Database
+- PostgreSQL.
+- Prisma ORM.
+- Database migrations.
+- Proper indexing and relational integrity.
+
+Connect to my existing PostgreSQL database through environment variables. Do not assume a particular database provider.
+
+### Authentication
+Choose a reliable authentication solution compatible with the existing project and PostgreSQL architecture.
+
+Implement:
+- Email registration.
+- Login and logout.
+- Secure password hashing if using custom authentication.
+- Password reset.
+- Session management.
+- Role-based access control.
+- Protected dashboard routes.
+
+Never store plaintext passwords.
+
+### AI integration
+Design a provider-independent AI service layer.
+
+Use an LLM provider through server-side API calls only. Never expose API keys in frontend code.
+
+The AI integration should support:
+- Message classification.
+- Scam-pattern identification.
+- Risk explanations.
+- Recommended safety actions.
+- Structured JSON responses.
+- Confidence and uncertainty explanations.
+
+Keep deterministic rule-based analysis as a fallback.
+
+Do not claim that the application has AI capabilities that have not actually been implemented.
+
+### Testing
+- Vitest for unit and integration tests.
+- Playwright for browser testing.
+- TypeScript checks.
+- ESLint.
+
+### Deployment
+Prepare for deployment on Vercel or another compatible Node.js hosting provider.
+
+## 5. PRODUCT MODULES
+
+Build the application as a collection of connected modules.
+
+### MODULE A: PUBLIC LANDING PAGE
+
+Create a polished, professional homepage.
+
+It should include:
+
+1. Navigation bar.
+2. TrustMark Africa logo or text-based brand identity.
+3. Hero section.
+4. Main call-to-action: Check a Message.
+5. Secondary call-to-action: Explore Community Alerts.
+6. Explanation of how the platform works.
+7. Main product features.
+8. Safety statistics only when real data exists.
+9. Educational section.
+10. Testimonials only when genuine testimonials exist.
+11. Frequently asked questions.
+12. Footer with privacy, terms, contact, and about links.
+
+The design should feel like a credible modern fintech/cybersecurity SaaS product.
+
+Avoid generic templates and excessive animations.
+
+### MODULE B: MESSAGE ANALYZER
+
+This is one of the most important product features.
+
+Create a message-analysis interface where users can paste suspicious text.
+
+The analyzer should:
+
+1. Accept pasted text.
+2. Validate input.
+3. Identify suspicious wording and behavioral patterns.
+4. Detect urgency and manipulation.
+5. Detect requests for OTPs, passwords, PINs, and sensitive information.
+6. Identify suspicious payment requests.
+7. Detect unexpected prize or reward claims.
+8. Identify suspicious login and verification requests.
+9. Identify impersonation indicators.
+10. Produce an understandable explanation.
+11. Recommend appropriate safety actions.
+
+Display results in a clear interface.
+
+Use risk levels:
+- LOW.
+- MEDIUM.
+- HIGH.
+
+Display:
+- Overall risk score.
+- Risk level.
+- Detected indicators.
+- Explanation of each indicator.
+- Recommended next steps.
+- Important limitations and uncertainty.
+
+Do not describe the result as a definitive fraud verdict.
+
+A LOW result must never mean guaranteed safety.
+
+Do not send user-submitted messages to an external AI provider without appropriate disclosure and privacy controls.
+
+Never request OTPs, passwords, PINs, full payment-card numbers, or other unnecessary sensitive information.
+
+### MODULE C: USER AUTHENTICATION
+
+Build a secure authentication system.
+
+Required features:
+- Registration.
+- Login.
+- Logout.
+- Password reset.
+- Email verification if supported.
+- User profile.
+- Session handling.
+- Protected routes.
+
+Support roles:
+
+- USER.
+- MODERATOR.
+- ADMIN.
+- BUSINESS.
+
+Only authorized roles should access moderation and administrative functionality.
+
+### MODULE D: USER DASHBOARD
+
+Create a personal dashboard.
+
+Display:
+- Welcome message.
+- Total message checks.
+- Recent analyses, if the user has opted into saving them.
+- Submitted reports.
+- Report review statuses.
+- Relevant community safety alerts.
+- Account settings.
+- Privacy controls.
+
+Allow users to delete their own saved data where applicable.
+
+Do not store full submitted messages by default. If analysis history is implemented, make retention and consent explicit.
+
+### MODULE E: COMMUNITY REPORTING
+
+Allow users to report suspicious activity.
+
+Support categories:
+- SMS.
+- WhatsApp.
+- Email.
+- Phone calls.
+- Websites.
+- Social media.
+- Mobile money.
+- Other.
+
+A report should contain:
+- Category.
+- Country.
+- General description.
+- Optional sanitized message excerpt.
+- Submission date.
+- Review status.
+
+Report statuses:
+- PENDING.
+- REVIEWED.
+- DISMISSED.
+
+Important safety requirements:
+
+1. Reports are allegations or community signals, not established facts.
+2. Do not publicly identify people as criminals based on user submissions.
+3. Avoid collecting unnecessary personal information.
+4. Provide a moderation workflow.
+5. Allow moderators to reject misleading or harmful reports.
+6. Provide an appropriate removal and appeal process.
+7. Keep unreviewed reports private.
+8. Publicly display only appropriately reviewed and sanitized reports.
+9. Record moderator actions in an audit log.
+10. Protect the application against spam and malicious submissions.
+
+### MODULE F: COMMUNITY ALERTS
+
+Create a searchable alert directory.
+
+Users should be able to filter by:
+- Country.
+- Category.
+- Date.
+- Risk type.
+- Keywords.
+
+Each alert should display:
+- General description.
+- Category.
+- Country.
+- Date.
+- Review status.
+- Safety recommendation.
+
+Never expose private reporter information.
+
+Include an explanation that community reports are not proof of wrongdoing.
+
+### MODULE G: MODERATOR DASHBOARD
+
+Create a protected moderation interface.
+
+Moderators should be able to:
+
+- View pending reports.
+- Open report details.
+- Review submissions.
+- Approve suitable reports.
+- Dismiss unsuitable reports.
+- Sanitize information before publication.
+- Record moderation reasons.
+- Track previous moderation actions.
+
+Only authorized moderators and administrators may perform these operations.
+
+Implement authorization on the server, not merely by hiding frontend buttons.
+
+### MODULE H: ADMIN DASHBOARD
+
+Create an administrator dashboard.
+
+Display real database-backed metrics:
+- Registered users.
+- Total analyses.
+- Reports submitted.
+- Pending reports.
+- Reviewed reports.
+- Reports by country.
+- Reports by category.
+
+Include:
+- User management.
+- Role management.
+- Moderation oversight.
+- Audit logs.
+- System configuration.
+
+Do not invent statistics or display hardcoded production metrics.
+
+### MODULE I: BUSINESS DASHBOARD
+
+Design a business-oriented subscription module.
+
+Target customers:
+- Small businesses.
+- Financial service providers.
+- Online marketplaces.
+- NGOs.
+- Telecommunications companies.
+- Digital platforms.
+- Financial institutions.
+
+Potential features:
+- Business account registration.
+- Organization profile.
+- Team management.
+- Threat monitoring.
+- Alert subscriptions.
+- Reporting and analytics.
+- API access in future plans.
+
+Build the foundation without pretending that enterprise integrations already exist.
+
+### MODULE J: EDUCATIONAL CENTER
+
+Create an educational resource section.
+
+Include articles and guides about:
+- Mobile money scams.
+- Phishing.
+- Fake job advertisements.
+- Investment scams.
+- Online shopping fraud.
+- Social engineering.
+- Identity theft.
+- OTP theft.
+- Impersonation.
+- Digital privacy.
+
+Make the resources practical and relevant to African digital experiences.
+
+Allow content to be expanded and managed through an administrative content system in a later phase.
+
+## 6. DATABASE DESIGN
+
+Design a normalized PostgreSQL schema using Prisma.
+
+Include appropriate models for:
+
+- User.
+- UserProfile.
+- Session or authentication-related records, depending on the chosen auth provider.
+- Analysis.
+- CommunityReport.
+- ModerationAction.
+- Alert.
+- BusinessOrganization.
+- BusinessMembership.
+- Subscription.
+- AuditLog.
+
+Use enums where appropriate.
+
+Requirements:
+- Proper primary keys.
+- Foreign keys.
+- Unique constraints.
+- Database indexes.
+- Created and updated timestamps.
+- Appropriate deletion behavior.
+- Minimal personal-data storage.
+
+Create migrations and validate the schema.
+
+Never modify an existing production database destructively.
+
+Use migrations that preserve existing records.
+
+## 7. SECURITY REQUIREMENTS
+
+Treat security as a core product requirement.
+
+Implement:
+
+- Server-side validation.
+- Authentication and authorization.
+- Role-based access control.
+- Rate limiting.
+- Request-size limits.
+- Secure session handling.
+- CSRF protection where applicable.
+- Safe error handling.
+- Protection against SQL injection.
+- Protection against XSS.
+- Security headers.
+- Input sanitization.
+- Abuse prevention.
+- Secure environment variable handling.
+- Audit logging for sensitive actions.
+
+Never trust client-side authorization.
+
+Never expose private reports through public APIs.
+
+Do not log passwords, tokens, OTPs, or complete private messages.
+
+Do not invent security compliance certifications.
+
+## 8. PRIVACY AND RESPONSIBLE AI
+
+The application must be transparent.
+
+Users should understand:
+- What information is collected.
+- Why it is collected.
+- Whether an AI provider processes their text.
+- How long information is retained.
+- How they can request deletion.
+- The limitations of automated risk detection.
+
+AI results should be presented as assistance, not certainty.
+
+Do not use AI to publicly accuse individuals or organizations of criminal behavior.
+
+Provide human moderation for public community alerts.
+
+Design the system to minimize personal information.
+
+## 9. DESIGN SYSTEM
+
+Create a distinctive visual identity.
+
+Suggested design direction:
+
+- Primary color: deep emerald green.
+- Secondary color: dark charcoal.
+- Background: soft off-white.
+- Accent: restrained gold or amber.
+- Typography: modern and readable.
+- Cards: clean, subtle borders.
+- Buttons: consistent rounded design.
+- Icons: Lucide.
+- Responsive layouts for mobile, tablet, and desktop.
+
+The application should look polished, credible, and trustworthy.
+
+Use a consistent spacing system.
+
+Include:
+- Loading states.
+- Empty states.
+- Error states.
+- Success notifications.
+- Form validation feedback.
+- Accessible focus states.
+- Mobile navigation.
+
+Do not use excessive gradients, unnecessary animations, or fake dashboard statistics.
+
+## 10. PROJECT STRUCTURE
+
+Use a maintainable architecture similar to:
+
+app/
+  (public)/
+  (auth)/
+  dashboard/
+  analyze/
+  reports/
+  alerts/
+  education/
+  business/
+  moderator/
+  admin/
+  api/
+components/
+  ui/
+  layout/
+  analyzer/
+  dashboard/
+  reports/
+  alerts/
+  forms/
+lib/
+  ai/
+  auth/
+  db/
+  security/
+  validation/
+  services/
+  utils/
+prisma/
+  schema.prisma
+tests/
+  unit/
+  integration/
+  e2e/
+public/
+  images/
+  icons/
+
+Adapt the structure to the existing repository instead of forcing unnecessary restructuring.
+
+## 11. API DESIGN
+
+Create clean, versionable APIs.
+
+Potential endpoints:
+
+POST /api/analyze
+
+POST /api/reports
+
+GET /api/reports
+
+GET /api/alerts
+
+GET /api/alerts/[id]
+
+GET /api/dashboard
+
+GET /api/moderation/reports
+
+PATCH /api/moderation/reports/[id]
+
+POST /api/auth/register
+
+POST /api/auth/login
+
+Use appropriate HTTP methods and status codes.
+
+Validate all incoming requests.
+
+Protect private endpoints.
+
+Return consistent response formats.
+
+Never expose stack traces or internal database errors to users.
+
+## 12. TESTING REQUIREMENTS
+
+Write tests for:
+
+- Message analyzer rules.
+- Risk score calculations.
+- Input validation.
+- Report submission.
+- Public report visibility.
+- Authorization.
+- Moderator actions.
+- API error handling.
+- Database operations.
+
+Add browser tests for:
+- Landing page.
+- Message analysis.
+- Registration and login.
+- Report submission.
+- Alert browsing.
+- Moderation workflow.
+
+Run:
+
+npm run lint
+npx tsc --noEmit
+npx prisma validate
+npm run test
+
+If a script is missing, create it and configure the relevant testing framework.
+
+Fix errors instead of simply reporting them.
+
+## 13. BUSINESS MODEL
+
+Prepare the architecture for a potential subscription business.
+
+Possible future plans:
+
+FREE:
+- Basic message analysis.
+- Educational resources.
+- Limited community alerts.
+
+PERSONAL PREMIUM:
+- Expanded alerts.
+- Personalized safety monitoring.
+- Saved analysis history, with explicit consent.
+
+BUSINESS:
+- Business dashboard.
+- Organization alerts.
+- Monitoring and analytics.
+- Team access.
+
+ENTERPRISE:
+- API access.
+- Integrations.
+- Advanced reporting.
+- Custom security workflows.
+
+Do not implement fake payment processing.
+
+If billing is implemented, use a legitimate payment provider and verify webhook signatures server-side.
+
+Do not assume customers will pay before validating demand.
+
+## 14. DEVELOPMENT ROADMAP
+
+Build the product in these phases.
+
+PHASE 1 — FOUNDATION
+- Inspect repository.
+- Set up application architecture.
+- Configure TypeScript and styling.
+- Configure PostgreSQL.
+- Set up Prisma.
+- Build landing page.
+- Implement message analyzer.
+- Implement report submission and storage.
+- Build public reviewed-alert feed.
+
+PHASE 2 — ACCOUNTS
+- Authentication.
+- User profiles.
+- Protected dashboards.
+- User privacy controls.
+
+PHASE 3 — MODERATION
+- Moderator roles.
+- Moderation queue.
+- Approval and dismissal.
+- Audit logging.
+- Report sanitization.
+
+PHASE 4 — AI
+- AI provider adapter.
+- Structured AI responses.
+- Explainable classifications.
+- Safety evaluations.
+- Fallback analyzer.
+- Privacy controls.
+
+PHASE 5 — BUSINESS
+- Organization accounts.
+- Business dashboard.
+- Team access.
+- Analytics.
+- Subscription foundations.
+
+PHASE 6 — PRODUCTION
+- Rate limiting.
+- Monitoring.
+- Security hardening.
+- Automated testing.
+- Deployment.
+- Backups.
+- Documentation.
+
+Do not skip foundational work to build flashy features.
+
+## 15. REQUIRED DELIVERABLES
+
+At completion, provide:
+
+1. A working Next.js application.
+2. Complete source code.
+3. Database schema.
+4. Database migrations.
+5. Environment variable example.
+6. API endpoints.
+7. Responsive UI.
+8. Authentication and authorization where implemented.
+9. Tests.
+10. README documentation.
+11. Local development instructions.
+12. Deployment instructions.
+13. Security and privacy notes.
+14. A list of completed and remaining features.
+
+Keep the code clean, reusable, typed, and documented.
+
+## 16. HOW TO WORK WITH ME
+
+I am developing this project in GitHub Codespaces on Windows.
+
+My coding level is advanced.
+
+I already have:
+- A GitHub repository.
+- Node.js.
+- An existing PostgreSQL database.
+- A Codespaces development environment.
+
+Do not assume I use VS Code locally. I use the browser-based GitHub Codespaces environment.
+
+Use terminal commands appropriate for the Linux environment inside Codespaces.
+
+Do not unnecessarily explain basic programming concepts.
+
+When modifying files:
+- Show which files you are creating or changing.
+- Preserve existing work.
+- Avoid duplicate implementations.
+- Keep dependencies reasonable.
+- Run tests and validation.
+- Report any command that needs my credentials or manual action.
+
+Do not fabricate successful test results.
+
+If something fails, diagnose it and fix it.
+
+If a feature cannot be completed because credentials or external services are missing, implement a clean integration boundary and explain what configuration is needed.
+
+## 17. FIRST ACTION
+
+Start now.
+
+First inspect the repository, Git branch, package.json, existing source files, and environment configuration.
+
+Then:
+
+1. Summarize the current repository state.
+2. Identify any existing code that must be preserved.
+3. Present the implementation sequence briefly.
+4. Begin Phase 1 immediately.
+5. Implement the actual code.
+6. Run validation and tests.
+7. Fix errors.
+8. Continue until the Phase 1 foundation is working.
+
+Do not stop at an architecture proposal.
+
+Do not generate only mockups.
+
+Do not leave core buttons nonfunctional.
+
+Do not invent database records, AI results, or security guarantees.
+
+**Build TrustMark Africa as a serious, responsible, scalable African digital safety product.**
+
+The guiding principle is:
+
+# Generated application files
+.next/
+node_modules/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.env*
+!.env.example
+
+# VERIFY BEFORE YOU TRUST.
+
+# The project brief above contains directory names that Git treats as ignore patterns.
+!app/
+!app/**
+!components/
+!components/**
+!lib/
+!lib/**
+!prisma/
+!prisma/**
+!tests/
+!tests/**
+!public/
+!public/**

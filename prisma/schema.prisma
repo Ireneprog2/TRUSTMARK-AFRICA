@@ -1,0 +1,230 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+  BUSINESS
+}
+
+enum ReportCategory {
+  SMS
+  WHATSAPP
+  EMAIL
+  PHONE_CALL
+  WEBSITE
+  SOCIAL_MEDIA
+  MOBILE_MONEY
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  DISMISSED
+}
+
+enum ModerationDecision {
+  APPROVE
+  DISMISS
+}
+
+enum AnalysisRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum OrganizationRole {
+  OWNER
+  MEMBER
+}
+
+enum SubscriptionPlan {
+  FREE
+  PERSONAL_PREMIUM
+  BUSINESS
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  INACTIVE
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model User {
+  id                String               @id @default(cuid())
+  email             String               @unique
+  passwordHash      String?
+  role              UserRole             @default(USER)
+  profile           UserProfile?
+  sessions          Session[]
+  analyses          Analysis[]
+  reports           CommunityReport[]
+  moderationActions ModerationAction[]   @relation("ModeratorActions")
+  memberships       BusinessMembership[]
+  auditLogs         AuditLog[]           @relation("AuditActor")
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+}
+
+model UserProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  displayName String?  @db.VarChar(80)
+  countryCode String   @default("RW") @db.VarChar(2)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId, expiresAt])
+}
+
+model RegistrationVerification {
+  email        String   @id
+  displayName  String   @db.VarChar(80)
+  passwordHash String
+  codeHash     String   @db.Char(64)
+  expiresAt    DateTime
+  attempts     Int      @default(0)
+  lastSentAt   DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([expiresAt])
+}
+
+model Analysis {
+  id         String            @id @default(cuid())
+  userId     String?
+  riskLevel  AnalysisRiskLevel
+  score      Int
+  indicators Json
+  user       User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt  DateTime          @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model CommunityReport {
+  id                String             @id @default(cuid())
+  category          ReportCategory
+  countryCode       String             @db.VarChar(2)
+  description       String             @db.VarChar(2000)
+  messageExcerpt    String?            @db.VarChar(500)
+  status            ReportStatus       @default(PENDING)
+  reporterId        String?
+  reporter          User?              @relation(fields: [reporterId], references: [id], onDelete: SetNull)
+  alert             Alert?
+  moderationActions ModerationAction[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([status, createdAt])
+  @@index([countryCode, category, createdAt])
+}
+
+model ModerationAction {
+  id          String             @id @default(cuid())
+  reportId    String
+  moderatorId String
+  decision    ModerationDecision
+  reason      String             @db.VarChar(1000)
+  report      CommunityReport    @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  moderator   User               @relation("ModeratorActions", fields: [moderatorId], references: [id], onDelete: Restrict)
+  createdAt   DateTime           @default(now())
+
+  @@index([reportId, createdAt])
+  @@index([moderatorId, createdAt])
+}
+
+model Alert {
+  id                   String          @id @default(cuid())
+  reportId             String          @unique
+  title                String          @db.VarChar(120)
+  description          String          @db.VarChar(1200)
+  category             ReportCategory
+  countryCode          String          @db.VarChar(2)
+  safetyRecommendation String          @db.VarChar(500)
+  report               CommunityReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reviewedAt           DateTime
+  createdAt            DateTime        @default(now())
+
+  @@index([countryCode, category, createdAt])
+}
+
+model BusinessOrganization {
+  id            String               @id @default(cuid())
+  name          String               @db.VarChar(160)
+  memberships   BusinessMembership[]
+  subscriptions Subscription[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+}
+
+model BusinessMembership {
+  id             String               @id @default(cuid())
+  organizationId String
+  userId         String
+  role           OrganizationRole     @default(MEMBER)
+  organization   BusinessOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime             @default(now())
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+}
+
+model Subscription {
+  id                  String               @id @default(cuid())
+  organizationId      String
+  plan                SubscriptionPlan     @default(BUSINESS)
+  status              SubscriptionStatus   @default(INACTIVE)
+  provider            String?              @db.VarChar(40)
+  providerReference   String?              @unique
+  currentPeriodEndsAt DateTime?
+  organization        BusinessOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  @@index([organizationId, status])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String   @db.VarChar(80)
+  entityType String   @db.VarChar(80)
+  entityId   String   @db.VarChar(80)
+  details    Json?
+  actor      User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model RateLimitBucket {
+  keyHash         String   @id @db.Char(64)
+  windowStartedAt DateTime
+  requestCount    Int
+  updatedAt       DateTime @updatedAt
+}
